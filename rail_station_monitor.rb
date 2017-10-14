@@ -1,37 +1,37 @@
 
 class Station
-  attr_reader :name, :stand_trains
+  attr_reader :name, :trains
 
   def initialize(name)
     @name = name.to_s
-    @stand_trains = []
+    @trains = []
   end
 
-  def receive_train(train)
-    if train.class == Train && !(stand_trains.include? train)
-      @stand_trains << train
-      return train
+  def receive_train(trn)
+    if trn.class == Train && !(trains.include? trn)
+      @trains << trn
+      trn
     end
   end
 
-  def send_train(train)
-    @stand_trains.delete(train)
+  def send_train(trn)
+    @trains.delete(trn)
   end
 
-  def list_trains(typeof_train = '')
-    typeof_train = typeof_train.to_s.downcase
-    unless typeof_train.empty?
-      if 'passenger'.start_with? typeof_train
-        return stand_trains.select { |trn| trn.typeof_train == :passenger }
-      elsif 'freight'.start_with? typeof_train
-        return stand_trains.select { |trn| trn.typeof_train == :freight }
-      end
+  def list_trains(typeof_train)
+    if typeof_train == :passenger
+      trains.select { |trn| trn.typeof_train == :passenger }
+    elsif typeof_train == :freight
+      trains.select { |trn| trn.typeof_train == :freight }
     end
-    return stand_trains
   end
 
-  def list_names(typeof_train = '')
-    list_trains(typeof_train).map &:to_s
+  def get_trains(typeof_train)
+    if typeof_train == :all
+      trains.map &:to_s
+    else
+      list_trains(typeof_train).map &:to_s
+    end
   end
 
   def to_s
@@ -44,22 +44,19 @@ class Train
   attr_accessor :countof_carriages, :speed
   attr_reader :route, :current_station
 
-  def initialize(uid, carriages, pass_or_frei = 'freight')
+  def initialize(uid, carriages, pass_or_frei)
     @unique_number = uid.to_s
     @countof_carriages = carriages.to_i
-    pass_or_frei = pass_or_frei.to_s.downcase
-    unless pass_or_frei.empty?
-      if 'passenger'.start_with? pass_or_frei
-        @typeof_train = :passenger
-      elsif 'freight'.start_with? pass_or_frei
-        @typeof_train = :freight
-      end
+    if pass_or_frei == :passenger
+      @typeof_train = :passenger
+    elsif pass_or_frei == :freight
+      @typeof_train = :freight
     end
     @speed = 0
   end
 
   def add_speed(amount)
-    self.speed = speed + amount
+    self.speed += amount
   end
 
   def stop
