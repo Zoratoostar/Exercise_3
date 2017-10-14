@@ -18,7 +18,7 @@ class Station
     @trains.delete(trn)
   end
 
-  def list_trains(typeof_train)
+  def get_trains(typeof_train)
     if typeof_train == :passenger
       trains.select { |trn| trn.typeof_train == :passenger }
     elsif typeof_train == :freight
@@ -26,11 +26,11 @@ class Station
     end
   end
 
-  def get_trains(typeof_train)
+  def list_trains(typeof_train)
     if typeof_train == :all
       trains.map &:to_s
     else
-      list_trains(typeof_train).map &:to_s
+      get_trains(typeof_train).map &:to_s
     end
   end
 
