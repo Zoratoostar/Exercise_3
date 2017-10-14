@@ -126,7 +126,7 @@ class Train
 end
 
 class Route
-  attr_accessor :initial_station, :final_station, :transitional_stations
+  attr_reader :initial_station, :final_station, :transitional_stations
 
   def initialize(initial_s, final_s)
     if initial_s.class == Station && final_s.class == Station && initial_s != final_s
