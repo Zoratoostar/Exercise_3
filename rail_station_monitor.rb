@@ -138,12 +138,12 @@ class Route
 
   def add_transitional_station(station)
     if station.class == Station
-      @transitional_stations << station
+      transitional_stations << station
     end
   end
 
   def delete_transitional_station(station)
-    @transitional_stations.delete(station)
+    transitional_stations.delete(station)
   end
 
   def list_stations
