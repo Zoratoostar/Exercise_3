@@ -76,11 +76,15 @@ class Train
     unique_number
   end
 
+  def current_station
+    route.stations[current_station_index]
+  end
+
   def assign_route(route)
     if route.class == Route
       @route = route
       self.current_station_index = 0
-      route.stations.first.receive_train(self)
+      current_station.receive_train(self)
     end
   end
 
@@ -96,17 +100,17 @@ class Train
 
   def shift_forward
     if next_station
-      route.stations[current_station_index].send_train(self)
+      current_station.send_train(self)
       self.current_station_index += 1
-      route.stations[current_station_index].receive_train(self)
+      current_station.receive_train(self)
     end
   end
 
   def shift_backward
     if previous_station
-      route.stations[current_station_index].send_train(self)
+      current_station.send_train(self)
       self.current_station_index -= 1
-      route.stations[current_station_index].receive_train(self)
+      current_station.receive_train(self)
     end
   end
 end
@@ -122,8 +126,7 @@ class Route
 
   def add_station(stn)
     if stn.class == Station
-      final_station = stations.pop
-      stations.push(stn, final_station)
+      stations.insert(-2, stn)
     end
   end
 
